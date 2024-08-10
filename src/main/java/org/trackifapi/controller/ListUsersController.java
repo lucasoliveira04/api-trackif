@@ -1,5 +1,6 @@
 package org.trackifapi.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,22 +21,24 @@ public class ListUsersController {
     }
 
     @GetMapping("/user-main")
-    private ResponseEntity<List<UserDto>> getAllUser(){
+    private ResponseEntity<?> getAllUser() {
         List<UserDto> users = listUsersServices.getAllDataUser();
 
-        if(users.isEmpty()){
-            return ResponseEntity.noContent().build();
+        if (users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body("Tabela de usuários principal está vazia.");
         }
 
-        return ResponseEntity.ok(users);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
     @GetMapping("/user-child")
-    private ResponseEntity<List<UserChildDto>> getAllUserChild(){
+    private ResponseEntity<?> getAllUserChild() {
         List<UserChildDto> users = listUsersServices.getAllDataUserChild();
-        if(users.isEmpty()){
-            return ResponseEntity.noContent().build();
+
+        if (users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body("Tabela de usuários filhos está vazia.");
         }
-        return ResponseEntity.ok(users);
+
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 }
