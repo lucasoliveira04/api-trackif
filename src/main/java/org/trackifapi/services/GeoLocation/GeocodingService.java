@@ -30,6 +30,7 @@ public class GeocodingService {
         }
     }
 
+    // formatando endereço
     private String formatAddress(JsonNode addressNode) {
         return String.format(
                 "%s, %s, %s - %s, %s",
@@ -41,6 +42,7 @@ public class GeocodingService {
         );
     }
 
+    // Verificando se tem algum campo undefined ou null no endereço
     private String cleanAddress(String address) {
         return (address == null || "undefined".equals(address)) ? "" : address.trim();
     }
