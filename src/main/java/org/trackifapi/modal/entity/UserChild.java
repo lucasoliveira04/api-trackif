@@ -12,10 +12,7 @@ public class UserChild {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "token")
-    private String token;
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_data_id", referencedColumnName = "id")
     private UserData userData;
 }
