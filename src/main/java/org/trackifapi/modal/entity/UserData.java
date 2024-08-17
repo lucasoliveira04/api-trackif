@@ -21,6 +21,9 @@ public class UserData {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "tephone")
+    private String telephone;
+
     @Column(name = "cpf")
     private String cpf;
 
