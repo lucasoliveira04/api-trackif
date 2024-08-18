@@ -32,13 +32,11 @@ public class GenerateTokenServices {
                     .parseClaimsJws(token)
                     .getBody();
 
-            // Extrai os dados que você deseja do token
             Map<String, Object> extractedClaims = new HashMap<>();
             extractedClaims.put("address", claims.get("address"));
             extractedClaims.put("timestamp", claims.get("timestamp"));
             extractedClaims.put("subject", claims.getSubject());
             extractedClaims.put("issuedAt", claims.getIssuedAt());
-            extractedClaims.put("expiration", claims.getExpiration());
 
             return extractedClaims;
         } catch (SignatureException e) {
@@ -58,7 +56,6 @@ public class GenerateTokenServices {
             tokenInfo.put("subject", claims.getSubject());
             tokenInfo.put("address", claims.get("address"));
             tokenInfo.put("timestamp", claims.get("timestamp"));
-            tokenInfo.put("expiration", claims.getExpiration());
 
             return tokenInfo;
         } catch (SignatureException e) {
