@@ -24,7 +24,7 @@ public class UserDataDto implements Serializable {
     private String cpf;
     private String rg;
     private String role;
-    private  StatusEnum status;
+    private StatusEnum status;
     private LocalDateTime createdAt;
 
     public static UserDataDto fromEntity(UserData userData){
