@@ -14,14 +14,11 @@ public class TokenModalChild {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "token")
+    @Column(name = "token", length = 512)
     private String token;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
-
-    @Column(name = "expiresAt")
-    private LocalDateTime expiresAt;
 
     @OneToOne
     @JoinColumn(name = "user_child_id", referencedColumnName = "id")

@@ -20,14 +20,12 @@ public class TokenModalChildDto implements Serializable {
     private Integer id;
     private String token;
     private LocalDateTime createdAt;
-    private LocalDateTime expiresAt;
     private UserChildDto userChild;
 
     public static TokenModalChildDto fromEntity(TokenModalChild tokenModalChild) {
         return TokenModalChildDto.builder()
                 .id(tokenModalChild.getId())
                 .createdAt(tokenModalChild.getCreatedAt())
-                .expiresAt(tokenModalChild.getExpiresAt())
                 .token(tokenModalChild.getToken())
                 .userChild(UserChildDto.fromEntity(tokenModalChild.getUserChild()))
                 .build();
