@@ -7,6 +7,7 @@ import org.trackifapi.modal.dto.UserDataDto;
 import org.trackifapi.modal.entity.UserData;
 import org.trackifapi.modal.repository.UserRepository;
 import org.trackifapi.services.pattern.ExistingField.ExistingFieldUser;
+import org.trackifapi.services.pattern.ExistingField.RegexFieldUser;
 
 import java.time.LocalDateTime;
 
@@ -15,19 +16,17 @@ public class AddUser {
 
     private final UserRepository userRepository;
     private final ExistingFieldUser existingFieldUser;
+    private final RegexFieldUser regexFieldUser;
 
-    public AddUser(UserRepository userRepository, ExistingFieldUser existingFieldUser) {
+    public AddUser(UserRepository userRepository, ExistingFieldUser existingFieldUser, RegexFieldUser regexFieldUser) {
         this.userRepository = userRepository;
         this.existingFieldUser = existingFieldUser;
+        this.regexFieldUser = regexFieldUser;
     }
 
     public ResponseEntity<String> addUser(UserDataDto userDataDto) {
         try {
-
-            // Verificando se os valores já existem antes de serem inseridos
-            existingFieldUser.toCheckColumnExists(userDataDto.getCpf());
-            existingFieldUser.toCheckColumnExists(userDataDto.getRg());
-            existingFieldUser.toCheckColumnExists(userDataDto.getEmail());
+            toCheckField(userDataDto);
 
             UserData userData = getUserData(userDataDto);
             userRepository.save(userData);
@@ -48,5 +47,22 @@ public class AddUser {
         userData.setRole(userDataDto.getRole());
         userData.setTelephone(userData.getTelephone());
         return userData;
+    }
+
+    private void toCheckField(UserDataDto userDataDto) {
+        if (!regexFieldUser.isValidCpf(userDataDto.getCpf())){
+            throw new RuntimeException("CPF inválido. Deve conter 11 digitos");
+        }
+
+        if (!regexFieldUser.isValidRg(userDataDto.getRg())){
+            throw new RuntimeException("RG inválido. Deve conter 9 digitos");
+        }
+
+
+        // Verificando se os valores já existem antes de serem inseridos
+        existingFieldUser.toCheckColumnExists(userDataDto.getCpf());
+        existingFieldUser.toCheckColumnExists(userDataDto.getRg());
+        existingFieldUser.toCheckColumnExists(userDataDto.getEmail());
+
     }
 }
