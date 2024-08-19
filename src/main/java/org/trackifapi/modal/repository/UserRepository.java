@@ -6,4 +6,7 @@ import org.trackifapi.modal.entity.UserData;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserData, Integer> {
+    boolean existsByCpf(String cpf);
+    boolean existsByRg(String rg);
+    boolean existsByEmail(String email);
 }

@@ -6,6 +6,7 @@ import org.trackifapi.enums.StatusEnum;
 import org.trackifapi.modal.dto.UserDataDto;
 import org.trackifapi.modal.entity.UserData;
 import org.trackifapi.modal.repository.UserRepository;
+import org.trackifapi.services.pattern.ExistingField.ExistingFieldUser;
 
 import java.time.LocalDateTime;
 
@@ -13,13 +14,21 @@ import java.time.LocalDateTime;
 public class AddUser {
 
     private final UserRepository userRepository;
+    private final ExistingFieldUser existingFieldUser;
 
-    public AddUser(UserRepository userRepository) {
+    public AddUser(UserRepository userRepository, ExistingFieldUser existingFieldUser) {
         this.userRepository = userRepository;
+        this.existingFieldUser = existingFieldUser;
     }
 
     public ResponseEntity<String> addUser(UserDataDto userDataDto) {
         try {
+
+            // Verificando se os valores já existem antes de serem inseridos
+            existingFieldUser.toCheckColumnExists(userDataDto.getCpf());
+            existingFieldUser.toCheckColumnExists(userDataDto.getRg());
+            existingFieldUser.toCheckColumnExists(userDataDto.getEmail());
+
             UserData userData = getUserData(userDataDto);
             userRepository.save(userData);
             return ResponseEntity.ok().body("Usuario registrado com sucesso!");
