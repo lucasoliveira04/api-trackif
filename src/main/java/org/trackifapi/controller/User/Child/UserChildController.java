@@ -34,4 +34,12 @@ public class UserChildController {
     public ResponseEntity<?> addUserChild(@RequestBody UserChildDto userChildDto){
         return adduserChild.addUserChild(userChildDto);
     }
+
+    /*
+    * Vai verificar se o endereço ainda é o mesmo, caso o endereço mude, essa rota irá fazer a atualização dele
+    * */
+    @GetMapping("/update/address/")
+    public ResponseEntity<?> updateAddress(){
+        return ResponseEntity.ok().body("Endereço atualizado");
+    }
 }
