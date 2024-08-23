@@ -36,7 +36,6 @@ public class GenerateTokenServices {
             extractedClaims.put("address", claims.get("address"));
             extractedClaims.put("timestamp", claims.get("timestamp"));
             extractedClaims.put("subject", claims.getSubject());
-            extractedClaims.put("issuedAt", claims.getIssuedAt());
 
             return extractedClaims;
         } catch (SignatureException e) {
@@ -65,6 +64,7 @@ public class GenerateTokenServices {
 
     public String createToken(String address) {
         Map<String, Object> claims = new HashMap<>();
+
         claims.put("address", address);
         claims.put("timestamp", new Date());
 
