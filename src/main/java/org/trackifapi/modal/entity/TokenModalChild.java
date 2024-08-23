@@ -20,6 +20,12 @@ public class TokenModalChild {
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
 
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "addressBefore")
+    private String addressBefore;
+
     @OneToOne
     @JoinColumn(name = "user_child_id", referencedColumnName = "id")
     private UserChild userChild;
