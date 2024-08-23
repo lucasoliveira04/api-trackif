@@ -5,11 +5,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.trackifapi.modal.entity.TokenModalChild;
+import org.springframework.web.client.RestTemplate;
+import org.trackifapi.services.GenerateToken.GenerateTokenServices;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Builder
 @Getter
@@ -21,14 +24,19 @@ public class TokenModalChildDto implements Serializable {
     private String token;
     private LocalDateTime createdAt;
     private UserChildDto userChild;
+    private String address;
+    private String addressBefore;
+
 
     public static TokenModalChildDto fromEntity(TokenModalChild tokenModalChild) {
-        return TokenModalChildDto.builder()
+        TokenModalChildDto.TokenModalChildDtoBuilder builder = TokenModalChildDto.builder()
                 .id(tokenModalChild.getId())
                 .createdAt(tokenModalChild.getCreatedAt())
                 .token(tokenModalChild.getToken())
-                .userChild(UserChildDto.fromEntity(tokenModalChild.getUserChild()))
-                .build();
-    }
+                .address(tokenModalChild.getAddress())
+                .addressBefore(tokenModalChild.getAddressBefore())
+                .userChild(UserChildDto.fromEntity(tokenModalChild.getUserChild()));
 
+        return builder.build();
+    }
 }
