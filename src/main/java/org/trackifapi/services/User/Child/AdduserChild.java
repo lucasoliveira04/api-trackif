@@ -27,7 +27,7 @@ public class AdduserChild {
         try{
             UserChild userChild = getUserChild(userChildDto);
             userChildRepository.save(userChild);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body("Id: " + userChild.getId());
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }

@@ -30,7 +30,7 @@ public class AddUser {
 
             UserData userData = getUserData(userDataDto);
             userRepository.save(userData);
-            return ResponseEntity.ok().body("Usuario registrado com sucesso!");
+            return ResponseEntity.ok().body("Usuario registrado com sucesso!\nId: "+userData.getId());
         } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
