@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.trackifapi.modal.dto.TokenModalChildDto;
+import org.trackifapi.modal.dto.TokenResponseDto;
+import org.trackifapi.modal.dto.UserChildDto;
 import org.trackifapi.modal.entity.TokenModalChild;
 import org.trackifapi.modal.entity.UserChild;
 import org.trackifapi.modal.repository.TokenModalChildRepository;
@@ -11,6 +13,7 @@ import org.trackifapi.modal.repository.UserChildRepository;
 import org.trackifapi.services.GenerateToken.GenerateTokenServices;
 
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 @Service
 public class AddToken {
@@ -29,7 +32,7 @@ public class AddToken {
         try {
             TokenModalChild tokenModalChild = getTokenModalChild(tokenModalChildDto, lat, lng);
             tokenModalChildRepository.save(tokenModalChild);
-            return ResponseEntity.ok().body("Token gerado com sucesso: " + tokenModalChildDto.getToken());
+            return ResponseEntity.ok().body("Token gerado com sucesso: " + tokenModalChildDto.getToken().toString());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -38,16 +41,38 @@ public class AddToken {
     private TokenModalChild getTokenModalChild(TokenModalChildDto tokenModalChildDto, double lat, double lng) {
         TokenModalChild tokenModalChild = new TokenModalChild();
 
-        tokenModalChild.setToken(getTokenAddress(lat, lng));
+        // Gere o token JWT
+        String token = getTokenAddress(lat, lng);
+
+        // Decodifique o token JWT e obtenha o endereço
+        TokenModalChildDto tokenResponse = getAddress(token);
+        tokenModalChild.setAddress(tokenResponse.getAddress());
         tokenModalChild.setCreatedAt(LocalDateTime.now());
 
         UserChild userChild = userChildRepository.findById(tokenModalChildDto.getId())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
 
+
+        tokenModalChild.setAddressBefore(tokenResponse.getAddress());
         tokenModalChild.setUserChild(userChild);
+        tokenModalChild.setToken(token);
 
         return tokenModalChild;
 
+    }
+
+    // Pegando dados do json
+    private TokenModalChildDto getAddress(String token) {
+        String url = "http://localhost:8080/token/decodeToken?token=" + token;
+        try {
+            TokenModalChildDto response = restTemplate.getForObject(url, TokenModalChildDto.class);
+            if (response == null || response.getAddress() == null || response.getAddress().isEmpty()) {
+                throw new RuntimeException("Endereço não encontrado na resposta.");
+            }
+            return response;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao obter JSON: " + e.getMessage(), e);
+        }
     }
 
     // rota que retorna token jwt
