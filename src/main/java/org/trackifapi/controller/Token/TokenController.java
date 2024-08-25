@@ -1,8 +1,10 @@
 package org.trackifapi.controller.Token;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.trackifapi.services.GenerateToken.GenerateTokenServices;
-import org.trackifapi.services.User.Child.Token.AddToken;
 
 import java.util.Map;
 
@@ -14,7 +16,7 @@ public class TokenController {
     public TokenController(GenerateTokenServices generateTokenServices) {
         this.generateTokenServices = generateTokenServices;
     }
-
+    
     // rota para gerar o token relacionado com o usuario filho
     @GetMapping("/generateToken")
     public String generateToken(@RequestParam double lat, @RequestParam double lng) {
