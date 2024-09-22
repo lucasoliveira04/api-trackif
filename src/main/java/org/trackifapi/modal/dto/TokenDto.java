@@ -1,37 +1,29 @@
 package org.trackifapi.modal.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-import org.trackifapi.modal.entity.UserChild.Token;
+import lombok.Getter;
+import lombok.Setter;
+import org.trackifapi.modal.entity.Child.TokenChild;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Builder
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class TokenDto implements Serializable {
+public class TokenDto {
     private Integer id;
     private String token;
     private LocalDateTime dataCriacao;
-    private UsuarioChildDto usuarioChild;
-    private Integer usuarioChildId;
-    private String nome;
+    private LocalDateTime dataExpiration;
+    private UsuarioChildDto usuarioChildDto;
+    private Integer userId;
 
-    public static TokenDto fromEntity(Token token) {
-        return TokenDto.builder()
-                .id(token.getId())
-                .token(token.getToken())
-                .dataCriacao(token.getDataCriacao())
-                .usuarioChildId(token.getUsuarioChild() != null ? token.getUsuarioChild().getId() : null)
-                .nome(token.getUsuarioChild() != null ? token.getUsuarioChild().getNome() : null)
-                .build();
+    public static TokenDto fromEntity(TokenChild tokenChild) {
+        TokenDto tokenDto = new TokenDto();
+        tokenDto.setId(tokenChild.getId());
+        tokenDto.setToken(tokenChild.getToken());
+        tokenDto.setDataCriacao(tokenChild.getDataCriacao());
+        tokenDto.setDataExpiration(tokenChild.getDataExpiration());
+        tokenDto.setUsuarioChildDto(UsuarioChildDto.fromEntity(tokenChild.getUsuario()));
+        return tokenDto;
     }
-
-
 }

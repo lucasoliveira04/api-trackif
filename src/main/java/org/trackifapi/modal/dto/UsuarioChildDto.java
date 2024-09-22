@@ -1,47 +1,44 @@
 package org.trackifapi.modal.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-import org.trackifapi.modal.entity.UserChild.UsuarioChild;
+import lombok.Getter;
+import lombok.Setter;
+import org.trackifapi.modal.entity.Child.UsuarioChild;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@Builder
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class UsuarioChildDto implements Serializable {
+public class UsuarioChildDto {
     private Integer id;
     private String nome;
     private String email;
     private String telefone;
     private String cpf;
     private String rg;
-    private Date dataNascimento;
-    private TokenDto token;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
+    private String rua;
+    private EnderecoDto endereco;
 
-
-    public static UsuarioChildDto fromEntity(UsuarioChild usuarioChild) {
-        if (usuarioChild == null) {
-            return null;
-        }
+    public static UsuarioChildDto fromEntity(UsuarioChild entity) {
         UsuarioChildDto dto = new UsuarioChildDto();
-        dto.setId(usuarioChild.getId());
-        dto.setNome(usuarioChild.getNome());
-        dto.setEmail(usuarioChild.getEmail());
-        dto.setTelefone(usuarioChild.getTelefone());
-        dto.setCpf(usuarioChild.getCpf());
-        dto.setRg(usuarioChild.getRg());
-        dto.setDataNascimento(usuarioChild.getDataNascimento());
-        dto.setCreated_at(LocalDateTime.now());
+        dto.setId(entity.getId());
+        dto.setNome(entity.getNome());
+        dto.setEmail(entity.getEmail());
+        dto.setTelefone(entity.getTelefone());
+        dto.setCpf(entity.getCpf());
+        dto.setRg(entity.getRg());
+        dto.setRua(entity.getRua());
+        dto.setCreatedAt(entity.getCreatedAt());
+
+        EnderecoDto enderecoDto = new EnderecoDto();
+        enderecoDto.setEstado(entity.getEstado());
+        enderecoDto.setCidade(entity.getCidade());
+        enderecoDto.setBairro(entity.getBairro());
+        enderecoDto.setCep(entity.getCep());
+        enderecoDto.setRua(entity.getRua());
+        dto.setEndereco(enderecoDto);
+
         return dto;
     }
-
 }
