@@ -1,7 +1,7 @@
 package org.trackifapi.services.Token;
 
 import org.springframework.stereotype.Service;
-import org.trackifapi.modal.dto.TokenDto;
+import org.trackifapi.modal.entity.dto.TokenDto;
 import org.trackifapi.modal.entity.Child.TokenChild;
 import org.trackifapi.modal.entity.Child.UsuarioChild;
 import org.trackifapi.modal.repository.TokenChildRepository;
