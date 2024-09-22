@@ -1,4 +1,4 @@
-package org.trackifapi.modal.dto;
+package org.trackifapi.modal.entity.dto;
 
 import lombok.Getter;
 import lombok.Setter;
