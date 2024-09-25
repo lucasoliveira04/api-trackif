@@ -1,7 +1,8 @@
 package org.trackifapi.services.Token;
 
 import org.springframework.stereotype.Service;
-import org.trackifapi.modal.entity.dto.TokenDto;
+import org.trackifapi.Enums.RolesEnum;
+import org.trackifapi.modal.dto.TokenDto;
 import org.trackifapi.modal.entity.Child.TokenChild;
 import org.trackifapi.modal.entity.Child.UsuarioChild;
 import org.trackifapi.modal.repository.TokenChildRepository;
@@ -22,6 +23,9 @@ public class TokenServicesImpl implements TokenSevicesInterface {
     public TokenChild addToken(TokenDto tokenDto, Integer idUsuario) {
         UsuarioChild usuarioChild = usuarioChildRepository.findById(tokenDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        usuarioChild.setRoles(RolesEnum.USER_CHILD);
+        usuarioChildRepository.save(usuarioChild);
 
         TokenChild token = new TokenChild();
         token.setToken(tokenDto.getToken());

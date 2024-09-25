@@ -1,4 +1,4 @@
-package org.trackifapi.modal.entity.dto;
+package org.trackifapi.modal.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
