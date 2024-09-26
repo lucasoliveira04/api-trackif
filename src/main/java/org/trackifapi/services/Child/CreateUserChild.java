@@ -8,7 +8,6 @@ import org.trackifapi.Enums.RolesEnum;
 import org.trackifapi.Exceptions.RegexValidationException;
 import org.trackifapi.modal.dto.UsuarioChildDto;
 import org.trackifapi.modal.entity.Child.UsuarioChild;
-import org.trackifapi.modal.repository.TokenChildRepository;
 import org.trackifapi.modal.repository.UsuarioChildRepository;
 import org.trackifapi.util.ApiAddressCep;
 import org.trackifapi.util.CheckUserRole;
@@ -19,13 +18,11 @@ import java.util.Map;
 public class CreateUserChild {
 
     private final UsuarioChildRepository usuarioChildRepository;
-    private final TokenChildRepository tokenChildRepository;
     private final CheckUserRole checkUserRole;
     private final ApiAddressCep apiAddressCep;
 
-    public CreateUserChild(UsuarioChildRepository usuarioChildRepository, TokenChildRepository tokenChildRepository, CheckUserRole checkUserRole, ApiAddressCep apiAddressCep) {
+    public CreateUserChild(UsuarioChildRepository usuarioChildRepository, CheckUserRole checkUserRole, ApiAddressCep apiAddressCep) {
         this.usuarioChildRepository = usuarioChildRepository;
-        this.tokenChildRepository = tokenChildRepository;
         this.checkUserRole = checkUserRole;
         this.apiAddressCep = apiAddressCep;
     }
@@ -40,12 +37,19 @@ public class CreateUserChild {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CEP não pode ser vazio");
             }
 
-            String cepInfo = apiAddressCep.getAddressByCep(dto.getEndereco().getCep());
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, String> enderecoMap = mapper.readValue(cepInfo, Map.class);
+            Map<String, String> enderecoMap = null;
 
-            if (enderecoMap.containsKey("erro")){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CEP inválido");
+            if (dto.getEndereco().getRua() == null || dto.getEndereco().getEstado() == null ||
+                    dto.getEndereco().getCidade() == null || dto.getEndereco().getBairro() == null) {
+
+                String cepInfo = apiAddressCep.getAddressByCep(dto.getEndereco().getCep());
+                ObjectMapper mapper = new ObjectMapper();
+                enderecoMap = mapper.readValue(cepInfo, Map.class);
+
+                if (enderecoMap.containsKey("erro")){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CEP inválido");
+                }
+
             }
 
             UsuarioChild usuarioChild = new UsuarioChild(
@@ -54,10 +58,10 @@ public class CreateUserChild {
                     dto.getTelefone(),
                     dto.getCpf(),
                     dto.getRg(),
-                    enderecoMap.get("logradouro"),
-                    enderecoMap.get("uf"),
-                    enderecoMap.get("localidade"),
-                    enderecoMap.get("bairro"),
+                    dto.getEndereco().getRua() != null ? dto.getEndereco().getRua() : enderecoMap.getOrDefault("logradouro", ""),
+                    dto.getEndereco().getEstado() != null ? dto.getEndereco().getEstado() : enderecoMap.getOrDefault("uf", ""),
+                    dto.getEndereco().getCidade() != null ? dto.getEndereco().getCidade() : enderecoMap.getOrDefault("localidade", ""),
+                    dto.getEndereco().getBairro() != null ? dto.getEndereco().getBairro() : enderecoMap.getOrDefault("bairro", ""),
                     dto.getEndereco().getCep(),
                     roles
             );
