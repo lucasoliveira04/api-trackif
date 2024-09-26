@@ -1,8 +1,9 @@
-package org.trackifapi.modal.entity.dto;
+package org.trackifapi.modal.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.trackifapi.Enums.RolesEnum;
 import org.trackifapi.modal.entity.Child.UsuarioChild;
 
 import java.time.LocalDateTime;
@@ -17,10 +18,17 @@ public class UsuarioChildDto {
     private String cpf;
     private String rg;
     private LocalDateTime createdAt;
-    private String rua;
     private EnderecoDto endereco;
+    private RolesEnum roles;
 
     public static UsuarioChildDto fromEntity(UsuarioChild entity) {
+        if (entity.getNome() == null || entity.getEmail() == null ||
+                entity.getCpf() == null || entity.getRg() == null ||
+                entity.getCep() == null) {
+            return null;
+        }
+
+
         UsuarioChildDto dto = new UsuarioChildDto();
         dto.setId(entity.getId());
         dto.setNome(entity.getNome());
@@ -28,17 +36,19 @@ public class UsuarioChildDto {
         dto.setTelefone(entity.getTelefone());
         dto.setCpf(entity.getCpf());
         dto.setRg(entity.getRg());
-        dto.setRua(entity.getRua());
         dto.setCreatedAt(entity.getCreatedAt());
+        dto.setRoles(entity.getRoles());
 
         EnderecoDto enderecoDto = new EnderecoDto();
-        enderecoDto.setEstado(entity.getEstado());
-        enderecoDto.setCidade(entity.getCidade());
-        enderecoDto.setBairro(entity.getBairro());
         enderecoDto.setCep(entity.getCep());
+        enderecoDto.setCidade(entity.getCidade());
+        enderecoDto.setEstado(entity.getEstado());
         enderecoDto.setRua(entity.getRua());
+        enderecoDto.setBairro(entity.getBairro());
         dto.setEndereco(enderecoDto);
 
         return dto;
     }
+
+
 }

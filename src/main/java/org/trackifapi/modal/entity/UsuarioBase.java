@@ -3,9 +3,15 @@ package org.trackifapi.modal.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.trackifapi.Enums.RolesEnum;
 import org.trackifapi.regex.RegexValidation;
 
 import java.time.LocalDateTime;
+
+import static org.trackifapi.util.Regex.EMAIL_REGEX;
+import static org.trackifapi.util.Regex.PHONE_REGEX;
+import static org.trackifapi.util.Regex.CPF_REGEX;
+import static org.trackifapi.util.Regex.RG_REGEX;
 
 @MappedSuperclass @Getter @Setter
 public abstract class UsuarioBase extends EnderecoBase {
@@ -31,12 +37,12 @@ public abstract class UsuarioBase extends EnderecoBase {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-    private static final String PHONE_REGEX = "\\d{10,11}";
-    private static final String CPF_REGEX = "\\d{11}";
-    private static final String RG_REGEX = "\\d{9}";
+    public UsuarioBase() {
+        super();
+    }
 
-    public UsuarioBase(String nome, String email, String telefone, String cpf, String rg, String rua, String bairro, String cidade, String estado, String cep) {
+    public UsuarioBase(String nome, String email, String telefone, String cpf, String rg,
+                       String rua, String bairro, String cidade, String estado, String cep) {
         super(rua, bairro, cidade, estado, cep);
         this.nome = nome;
 
@@ -53,9 +59,6 @@ public abstract class UsuarioBase extends EnderecoBase {
         this.rg = rg;
     }
 
-    public UsuarioBase() {
-        super();
-    }
 
     @PrePersist
     protected void onCreate() {

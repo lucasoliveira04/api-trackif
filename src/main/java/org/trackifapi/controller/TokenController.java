@@ -2,7 +2,7 @@ package org.trackifapi.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.trackifapi.modal.entity.dto.TokenDto;
+import org.trackifapi.modal.dto.TokenDto;
 import org.trackifapi.modal.entity.Child.TokenChild;
 import org.trackifapi.services.Token.TokenServicesImpl;
 
