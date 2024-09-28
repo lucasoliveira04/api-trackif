@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 import org.trackifapi.Enums.RolesEnum;
+import org.trackifapi.Enums.StatusEnum;
 import org.trackifapi.modal.entity.UsuarioBase;
 
 @Entity
@@ -22,8 +23,8 @@ public class UserDefault extends UsuarioBase {
         }
 
         public UserDefault(String nome, String email, String telefone, String cpf, String rg,
-                        String rua, String estado, String cidade, String bairro, String cep, RolesEnum roles) {
-            super(nome, email, telefone, cpf, rg, rua, bairro, cidade, estado, cep);
+                           String rua, String estado, String cidade, String bairro, String cep, RolesEnum roles, StatusEnum status) {
+            super(nome, email, telefone, cpf, rg, rua, bairro, cidade, estado, cep, status);
 
             this.roles = roles;
         }

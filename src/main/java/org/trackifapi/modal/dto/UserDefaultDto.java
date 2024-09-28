@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.trackifapi.Enums.RolesEnum;
+import org.trackifapi.Enums.StatusEnum;
 import org.trackifapi.modal.entity.UserDefault.UserDefault;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,8 @@ public class UserDefaultDto {
     private LocalDateTime createdAt;
     private EnderecoDto endereco;
     private RolesEnum roles;
+    private StatusEnum status;
+
 
     public static UserDefaultDto fromEntity(UserDefault entity) {
         if (entity.getNome() == null || entity.getEmail() == null ||
@@ -38,6 +41,7 @@ public class UserDefaultDto {
         dto.setRg(entity.getRg());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setRoles(entity.getRoles());
+        dto.setStatus(entity.getStatus());
 
         EnderecoDto enderecoDto = new EnderecoDto();
         enderecoDto.setCep(entity.getCep());
