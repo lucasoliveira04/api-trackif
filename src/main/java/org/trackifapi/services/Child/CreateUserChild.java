@@ -8,29 +8,39 @@ import org.trackifapi.Enums.RolesEnum;
 import org.trackifapi.Exceptions.RegexValidationException;
 import org.trackifapi.modal.dto.UsuarioChildDto;
 import org.trackifapi.modal.entity.Child.UsuarioChild;
+import org.trackifapi.modal.repository.UserDefaultRepository;
 import org.trackifapi.modal.repository.UsuarioChildRepository;
 import org.trackifapi.util.ApiAddressCep;
 import org.trackifapi.util.CheckUserRole;
+import org.trackifapi.util.UserExisting;
 
 import java.util.Map;
 
 @Service
 public class CreateUserChild {
 
+    private final UserDefaultRepository userDefaultRepository;
     private final UsuarioChildRepository usuarioChildRepository;
     private final CheckUserRole checkUserRole;
     private final ApiAddressCep apiAddressCep;
+    private final UserExisting userExisting;
 
-    public CreateUserChild(UsuarioChildRepository usuarioChildRepository, CheckUserRole checkUserRole, ApiAddressCep apiAddressCep) {
+    public CreateUserChild(UserDefaultRepository userDefaultRepository, UsuarioChildRepository usuarioChildRepository, CheckUserRole checkUserRole, ApiAddressCep apiAddressCep, UserExisting userExisting) {
+        this.userDefaultRepository = userDefaultRepository;
         this.usuarioChildRepository = usuarioChildRepository;
         this.checkUserRole = checkUserRole;
         this.apiAddressCep = apiAddressCep;
+        this.userExisting = userExisting;
     }
 
     public ResponseEntity<?> createUsuarioChild(UsuarioChildDto dto) {
         try{
             checkUserRole.checkToUser();
             RolesEnum roles = checkUserRole.getRole();
+
+            if (userExisting.userExists(dto.getCpf(), dto.getRg(), dto.getTelefone(), dto.getEmail())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já cadastrado");
+            }
 
             String cep = dto.getEndereco().getCep();
             if (cep == null || cep.trim().isEmpty()){
@@ -49,7 +59,6 @@ public class CreateUserChild {
                 if (enderecoMap.containsKey("erro")){
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CEP inválido");
                 }
-
             }
 
             UsuarioChild usuarioChild = new UsuarioChild(
@@ -63,7 +72,8 @@ public class CreateUserChild {
                     dto.getEndereco().getCidade() != null ? dto.getEndereco().getCidade() : enderecoMap.getOrDefault("localidade", ""),
                     dto.getEndereco().getBairro() != null ? dto.getEndereco().getBairro() : enderecoMap.getOrDefault("bairro", ""),
                     dto.getEndereco().getCep(),
-                    roles
+                    roles,
+                    dto.getStatus()
             );
 
             usuarioChildRepository.save(usuarioChild);
@@ -74,6 +84,5 @@ public class CreateUserChild {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar usuário: " + e.getMessage());
         }
-
     }
 }
