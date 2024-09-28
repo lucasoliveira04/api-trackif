@@ -1,13 +1,13 @@
-package org.trackifapi.services.Child;
+package org.trackifapi.services.UserDefault;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.trackifapi.Enums.RolesEnum;
-import org.trackifapi.Exceptions.RegexValidationException;
-import org.trackifapi.modal.dto.UsuarioChildDto;
-import org.trackifapi.modal.entity.Child.UsuarioChild;
+import org.trackifapi.Enums.StatusEnum;
+import org.trackifapi.modal.dto.UserDefaultDto;
+import org.trackifapi.modal.entity.UserDefault.UserDefault;
 import org.trackifapi.modal.repository.UserDefaultRepository;
 import org.trackifapi.modal.repository.UsuarioChildRepository;
 import org.trackifapi.util.ApiAddressCep;
@@ -17,24 +17,24 @@ import org.trackifapi.util.UserExisting;
 import java.util.Map;
 
 @Service
-public class CreateUserChild {
+public class CreateUserDefault {
 
-    private final UserDefaultRepository userDefaultRepository;
     private final UsuarioChildRepository usuarioChildRepository;
-    private final CheckUserRole checkUserRole;
+    private final UserDefaultRepository userDefaultRepository;
     private final ApiAddressCep apiAddressCep;
+    private final CheckUserRole checkUserRole;
     private final UserExisting userExisting;
 
-    public CreateUserChild(UserDefaultRepository userDefaultRepository, UsuarioChildRepository usuarioChildRepository, CheckUserRole checkUserRole, ApiAddressCep apiAddressCep, UserExisting userExisting) {
-        this.userDefaultRepository = userDefaultRepository;
+    public CreateUserDefault(UsuarioChildRepository usuarioChildRepository, UserDefaultRepository userDefaultRepository, ApiAddressCep apiAddressCep, CheckUserRole checkUserRole, UserExisting userExisting) {
         this.usuarioChildRepository = usuarioChildRepository;
-        this.checkUserRole = checkUserRole;
+        this.userDefaultRepository = userDefaultRepository;
         this.apiAddressCep = apiAddressCep;
+        this.checkUserRole = checkUserRole;
         this.userExisting = userExisting;
     }
 
-    public ResponseEntity<?> createUsuarioChild(UsuarioChildDto dto) {
-        try{
+    public ResponseEntity<?> createDefaultUser(UserDefaultDto dto) {
+        try {
             checkUserRole.checkToUser();
             RolesEnum roles = checkUserRole.getRole();
 
@@ -61,7 +61,7 @@ public class CreateUserChild {
                 }
             }
 
-            UsuarioChild usuarioChild = new UsuarioChild(
+            UserDefault userDefault = new UserDefault(
                     dto.getNome(),
                     dto.getEmail(),
                     dto.getTelefone(),
@@ -76,13 +76,26 @@ public class CreateUserChild {
                     dto.getStatus()
             );
 
-            usuarioChildRepository.save(usuarioChild);
+            userDefaultRepository.save(userDefault);
 
-            return new ResponseEntity<>(usuarioChild, HttpStatus.CREATED);
-        } catch (RegexValidationException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de validação: " + e.getMessage());
+            UserDefault savedUser = userDefaultRepository.findById(userDefault.getId()).orElse(null);
+
+
+            if (savedUser.getStatus() == null){
+                savedUser.setStatus(StatusEnum.ATIVADO);
+                userDefaultRepository.save(savedUser);
+            }
+
+            return new ResponseEntity<>(userDefault, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar usuário: " + e.getMessage());
         }
+    }
+
+    private boolean userExists(String cpf, String rg, String telefone, String email) {
+        return userDefaultRepository.findByCpf(cpf).isPresent() || usuarioChildRepository.findByCpf(cpf).isPresent() ||
+                userDefaultRepository.findByRg(rg).isPresent() || usuarioChildRepository.findByRg(rg).isPresent() ||
+                userDefaultRepository.findByTelefone(telefone).isPresent() || usuarioChildRepository.findByTelefone(telefone).isPresent() ||
+                userDefaultRepository.findByEmail(email).isPresent() || usuarioChildRepository.findByEmail(email).isPresent();
     }
 }

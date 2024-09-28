@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.trackifapi.Enums.RolesEnum;
+import org.trackifapi.Enums.StatusEnum;
 import org.trackifapi.regex.RegexValidation;
 
 import java.time.LocalDateTime;
@@ -37,12 +38,15 @@ public abstract class UsuarioBase extends EnderecoBase {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
+
     public UsuarioBase() {
         super();
     }
 
     public UsuarioBase(String nome, String email, String telefone, String cpf, String rg,
-                       String rua, String bairro, String cidade, String estado, String cep) {
+                       String rua, String bairro, String cidade, String estado, String cep, StatusEnum status) {
         super(rua, bairro, cidade, estado, cep);
         this.nome = nome;
 

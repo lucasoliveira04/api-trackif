@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.trackifapi.Enums.RolesEnum;
 import org.trackifapi.Enums.StatusEnum;
-import org.trackifapi.modal.entity.Child.UsuarioChild;
+import org.trackifapi.modal.entity.UserDefault.UserDefault;
 
 import java.time.LocalDateTime;
 
 @Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UsuarioChildDto {
+public class UserDefaultDto {
     private Integer id;
     private String nome;
     private String email;
@@ -24,7 +24,7 @@ public class UsuarioChildDto {
     private StatusEnum status;
 
 
-    public static UsuarioChildDto fromEntity(UsuarioChild entity) {
+    public static UserDefaultDto fromEntity(UserDefault entity) {
         if (entity.getNome() == null || entity.getEmail() == null ||
                 entity.getCpf() == null || entity.getRg() == null ||
                 entity.getCep() == null) {
@@ -32,7 +32,7 @@ public class UsuarioChildDto {
         }
 
 
-        UsuarioChildDto dto = new UsuarioChildDto();
+        UserDefaultDto dto = new UserDefaultDto();
         dto.setId(entity.getId());
         dto.setNome(entity.getNome());
         dto.setEmail(entity.getEmail());
@@ -53,6 +53,4 @@ public class UsuarioChildDto {
 
         return dto;
     }
-
-
 }
