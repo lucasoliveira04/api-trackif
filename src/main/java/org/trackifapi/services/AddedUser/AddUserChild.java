@@ -2,6 +2,7 @@ package org.trackifapi.services.AddedUser;
 
 import org.springframework.stereotype.Service;
 import org.trackifapi.Enum.RoleEnum;
+import org.trackifapi.mapper.UserMapper;
 import org.trackifapi.modal.Repository.TokenModalRepository;
 import org.trackifapi.modal.Repository.UserChildModalRepository;
 import org.trackifapi.modal.dto.UserDto;
@@ -14,37 +15,32 @@ import org.trackifapi.services.token.GenerateToken;
 public class AddUserChild implements IUserService {
     private final UserChildModalRepository userChildModalRepository;
     private final TokenModalRepository tokenModalRepository;
+    private final GenerateToken generateToken;
+    private final UserMapper userMapper;
 
-    public AddUserChild(UserChildModalRepository userChildModalRepository, TokenModalRepository tokenModalRepository) {
+    public AddUserChild(UserChildModalRepository userChildModalRepository, TokenModalRepository tokenModalRepository, GenerateToken generateToken, org.trackifapi.mapper.UserMapper userMapper) {
         this.userChildModalRepository = userChildModalRepository;
         this.tokenModalRepository = tokenModalRepository;
+        this.generateToken = generateToken;
+        this.userMapper = userMapper;
     }
-
 
     public void addUser(UserDto user) {
         UserChildModal userChildModal = new UserChildModal();
-        TokenModal token = new TokenModal();
-        GenerateToken generateToken = new GenerateToken();
 
-        userChildModal.setName(user.getName());
-        userChildModal.setEmail(user.getEmail());
-        userChildModal.setPhone(user.getPhone());
-        userChildModal.setRg(user.getRg());
-        userChildModal.setCpf(user.getCpf());
-        userChildModal.setAge(user.getAge());
-        userChildModal.setDateBirth(user.getDateBirth());
-        userChildModal.setGender(user.getGender());
+        UserMapper.mapDtoToUser(user, userChildModal);
+
         userChildModal.setRoleEnum(RoleEnum.USER_CHILD);
 
+        TokenModal tokenModal = new TokenModal();
         String generatedToken = generateToken.generateToken(userChildModal.getRoleEnum(), userChildModal);
-        token.setToken(generatedToken);
-        token.setUserChild(userChildModal);
 
-        userChildModal.setToken(token);
-
-
+        tokenModal.setToken(generatedToken);
+        tokenModal.setUserChild(userChildModal);
+        userChildModal.setToken(tokenModal);
 
         userChildModalRepository.save(userChildModal);
-        tokenModalRepository.save(token);
+        tokenModalRepository.save(tokenModal);
+
     }
 }

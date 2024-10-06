@@ -1,10 +1,8 @@
 package org.trackifapi.modal.interfaces;
 
-
-import org.trackifapi.Enum.RoleEnum;
-
-import java.time.LocalDateTime;
-
+/**
+ * Interface para Usuario
+ */
 public interface IUser {
     String getName();
     String getRg();
@@ -14,5 +12,13 @@ public interface IUser {
     String getPhone();
     java.util.Date getDateBirth();
     String getGender();
-    LocalDateTime createdAt();
+
+    void setName(String name);
+    void setRg(String rg);
+    void setCpf(String cpf);
+    void setAge(int age);
+    void setEmail(String email);
+    void setPhone(String phone);
+    void setDateBirth(java.util.Date dateBirth);
+    void setGender(String gender);
 }

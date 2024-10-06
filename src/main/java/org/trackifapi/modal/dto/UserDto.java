@@ -8,6 +8,7 @@ import org.trackifapi.modal.entity.child.UserChildModal;
 import org.trackifapi.modal.entity.father.UserFatherModal;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -26,9 +27,13 @@ public class UserDto implements Serializable {
     private Date dateBirth;
     private String gender;
     private RoleEnum roleEnum;
+    private LocalDateTime createdAt;
 
     private TokenDto token;
 
+    /**
+     * fromEntity para usuario pai
+     * */
     public static UserDto fromEntityFather(UserFatherModal userFatherModal) {
         UserDto userDto = new UserDto();
         userDto.setId(userFatherModal.getId());
@@ -41,10 +46,14 @@ public class UserDto implements Serializable {
         userDto.setDateBirth(userFatherModal.getDateBirth());
         userDto.setGender(userFatherModal.getGender());
         userDto.setRoleEnum(userFatherModal.getRoleEnum());
+        userDto.setCreatedAt(userFatherModal.getCreatedAt());
         return userDto;
     }
 
-    // User Child
+
+    /**
+    * fromEntity para usuario filho
+    * */
     public static UserDto fromEntity(UserChildModal userChildModal) {
         UserDto userDto = new UserDto();
         userDto.setId(userChildModal.getId());
@@ -57,6 +66,7 @@ public class UserDto implements Serializable {
         userDto.setDateBirth(userChildModal.getDateBirth());
         userDto.setGender(userChildModal.getGender());
         userDto.setRoleEnum(userChildModal.getRoleEnum());
+        userDto.setCreatedAt(userChildModal.getCreatedAt());
 
         if (userChildModal.getToken() != null) {
             userDto.setToken(TokenDto.fromEntity(userChildModal.getToken()));

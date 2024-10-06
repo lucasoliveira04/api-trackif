@@ -41,56 +41,19 @@ public class UserFatherModal implements IUser, IUserWithRoles {
         this.dateBirth = dateBirth;
         this.gender = gender;
         this.roleEnum = roleEnum;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
+    }
+
+
+    // Obtendo a data de criação do usuário
+    @PrePersist
+    protected void OnCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public UserFatherModal() {
     }
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getRg() {
-        return this.rg;
-    }
-
-    @Override
-    public String getCpf() {
-        return this.cpf;
-    }
-
-    @Override
-    public int getAge() {
-        return this.age;
-    }
-
-    @Override
-    public String getEmail() {
-        return this.email;
-    }
-
-    @Override
-    public String getPhone() {
-        return this.phone;
-    }
-
-    @Override
-    public Date getDateBirth() {
-        return this.dateBirth;
-    }
-
-    @Override
-    public String getGender() {
-        return this.gender;
-    }
-
-    @Override
-    public LocalDateTime createdAt() {
-        return this.createdAt;
-    }
 
     @Override
     public RoleEnum getRolesEnum() {
