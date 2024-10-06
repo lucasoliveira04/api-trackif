@@ -35,7 +35,7 @@ public class UserChildModal implements IUser, IUserWithRoles {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "userChild")
     private TokenModal token;
 
-    public UserChildModal(String name, String rg, String cpf, int age, String email, String phone, Date dateBirth, String gender, LocalDateTime createdAt, RoleEnum roleEnum) {
+    public UserChildModal(String name, String rg, String cpf, int age, String email, String phone, Date dateBirth, String gender, RoleEnum roleEnum) {
         this.name = name;
         this.rg = rg;
         this.cpf = cpf;
@@ -44,61 +44,19 @@ public class UserChildModal implements IUser, IUserWithRoles {
         this.phone = phone;
         this.dateBirth = dateBirth;
         this.gender = gender;
-        this.createdAt = createdAt;
         this.roleEnum = roleEnum;
     }
 
     public UserChildModal() {
     }
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getRg() {
-        return this.rg;
-    }
-
-    @Override
-    public String getCpf() {
-        return this.cpf;
-    }
-
-    @Override
-    public int getAge() {
-        return this.age;
-    }
-
-    @Override
-    public String getEmail() {
-        return this.email;
-    }
-
-    @Override
-    public String getPhone() {
-        return this.phone;
-    }
-
-    @Override
-    public Date getDateBirth() {
-        return this.dateBirth;
-    }
-
-    @Override
-    public String getGender() {
-        return this.gender;
-    }
-
-    @Override
-    public LocalDateTime createdAt() {
-        return this.createdAt;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
     }
 
     @Override
     public RoleEnum getRolesEnum() {
         return this.roleEnum;
     }
-
 }
