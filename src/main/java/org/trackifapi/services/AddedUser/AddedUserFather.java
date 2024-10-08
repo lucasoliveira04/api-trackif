@@ -20,8 +20,13 @@ public class AddedUserFather implements IUserService {
 
     @Override
     public void addUser(UserDto user) {
-        UserFatherModal userFatherModal = new UserFatherModal();
-        UserMapper.mapDtoToUser(user, userFatherModal);
-        userFatherModalRepository.save(userFatherModal);
+        try{
+            userMapper.applyRegex(user);
+            UserFatherModal userFatherModal = new UserFatherModal();
+            UserMapper.mapDtoToUser(user, userFatherModal);
+            userFatherModalRepository.save(userFatherModal);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 }

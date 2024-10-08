@@ -26,21 +26,26 @@ public class AddUserChild implements IUserService {
     }
 
     public void addUser(UserDto user) {
-        UserChildModal userChildModal = new UserChildModal();
+        try{
+            UserChildModal userChildModal = new UserChildModal();
 
-        UserMapper.mapDtoToUser(user, userChildModal);
+            userMapper.applyRegex(user);
 
-        userChildModal.setRoleEnum(RoleEnum.USER_CHILD);
+            UserMapper.mapDtoToUser(user, userChildModal);
 
-        TokenModal tokenModal = new TokenModal();
-        String generatedToken = generateToken.generateToken(userChildModal.getRoleEnum(), userChildModal);
+            userChildModal.setRoleEnum(RoleEnum.USER_CHILD);
 
-        tokenModal.setToken(generatedToken);
-        tokenModal.setUserChild(userChildModal);
-        userChildModal.setToken(tokenModal);
+            TokenModal tokenModal = new TokenModal();
+            String generatedToken = generateToken.generateToken(userChildModal.getRoleEnum(), userChildModal);
 
-        userChildModalRepository.save(userChildModal);
-        tokenModalRepository.save(tokenModal);
+            tokenModal.setToken(generatedToken);
+            tokenModal.setUserChild(userChildModal);
+            userChildModal.setToken(tokenModal);
 
+            userChildModalRepository.save(userChildModal);
+            tokenModalRepository.save(tokenModal);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 }
