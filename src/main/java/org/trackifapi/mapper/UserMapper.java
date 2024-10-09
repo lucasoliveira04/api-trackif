@@ -12,11 +12,11 @@ import org.trackifapi.regex.HashMapRegex;
 @Component
 public class UserMapper {
     private final HashMapRegex hashMapRegex;
-    private final ApplyRegex applyRegex;
+    private final ApplyRegex regex;
 
-    public UserMapper(HashMapRegex hashMapRegex, ApplyRegex applyRegex) {
+    public UserMapper(HashMapRegex hashMapRegex, ApplyRegex regex) {
         this.hashMapRegex = hashMapRegex;
-        this.applyRegex = applyRegex;
+        this.regex = regex;
     }
 
     /**
@@ -39,8 +39,7 @@ public class UserMapper {
     }
 
     public void applyRegex(UserDto userDto) {
-        ApplyRegex<UserDto> regexValidator = new ApplyRegex<>(userDto, hashMapRegex);
-        regexValidator.applyRegex();
+        regex.applyRegex(userDto);
     }
 
 }

@@ -12,12 +12,12 @@ public class HashMapRegex {
     private final Map<String, String> regexMap = new HashMap<>();
 
     public HashMapRegex(){
-        regexMap.put("REGEX_NAME", "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$");
-        regexMap.put("REGEX_EMAIL", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
-        regexMap.put("REGEX_PHONE", "^\\(\\d{2}\\)\\d{5}-\\d{4}$");
-        regexMap.put("REGEX_RG", "^\\d{2}\\.\\d{3}\\.\\d{3}-\\d{1}$");
-        regexMap.put("REGEX_CPF", "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$");
-        regexMap.put("REGEX_AGE", "^(0?[1-9]|[1-9][0-9])$");
+        regexMap.put("REGEX_NAME", "^[a-zA-Z]+$"); // Somente letras
+        regexMap.put("REGEX_EMAIL", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"); // Sem espaços e caracteres especiais extras
+        regexMap.put("REGEX_PHONE", "^\\d{11}$"); // Apenas números (11 dígitos)
+        regexMap.put("REGEX_RG", "^\\d{9}$"); // Apenas números (9 dígitos)
+        regexMap.put("REGEX_CPF", "^\\d{11}$"); // Apenas números (11 dígitos)
+        regexMap.put("REGEX_AGE", "^(\\d{1,2})$"); // Apenas números, até 2 dígitos para idade
     }
 
     public String getRegex(String fieldName){
