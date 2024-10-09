@@ -27,9 +27,11 @@ public class UserController {
         try{
             addedUserFather.addUser(userDto);
             return ResponseEntity.ok("Father added successfully");
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error adding father");
-        }
+        } 
     }
 
     @PostMapping("/add/child")
@@ -37,9 +39,13 @@ public class UserController {
         try{
             addUserChild.addUser(userDto);
             return ResponseEntity.ok("Child added successfully");
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error adding child");
         }
+
+
     }
 
     @GetMapping("/list/fathers")

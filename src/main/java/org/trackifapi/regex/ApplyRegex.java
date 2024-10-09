@@ -1,26 +1,22 @@
 package org.trackifapi.regex;
 
-import org.springframework.stereotype.Component;
-import org.trackifapi.modal.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.trackifapi.modal.dto.UserDto;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-public class ApplyRegex<T> {
-    private Object obj;
-    private HashMapRegex hashMapRegex;
+@Service
+public class ApplyRegex {
+    private final HashMapRegex hashMapRegex;
 
     @Autowired
-    public ApplyRegex(Object obj, HashMapRegex hashMapRegex) {
-        this.obj = obj;
+    public ApplyRegex(HashMapRegex hashMapRegex) {
         this.hashMapRegex = hashMapRegex;
     }
 
-    public void applyRegex() {
-        UserDto user = (UserDto) obj;
-
+    public void applyRegex(UserDto user) {
         if (user != null) {
             Map<String, String> fieldsToCheck = new HashMap<>();
             fieldsToCheck.put("Name", user.getName());
@@ -44,3 +40,4 @@ public class ApplyRegex<T> {
         }
     }
 }
+
