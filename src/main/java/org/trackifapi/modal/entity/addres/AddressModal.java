@@ -14,12 +14,25 @@ public class AddressModal {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(length = 500)
     private String street;
+
+    @Column(length = 500)
     private String number;
+
+    @Column(length = 500)
     private String neighborhood;
+
+    @Column(length = 500)
     private String city;
+
+    @Column(length = 500)
     private String state;
+
+    @Column(length = 500)
     private String country;
+
+    @Column(length = 500)
     private String cep;
 
     @OneToOne
