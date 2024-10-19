@@ -37,6 +37,7 @@ public class UserMapper {
         entity.setAge(userDto.getAge());
         entity.setDateBirth(userDto.getDateBirth());
         entity.setGender(userDto.getGender());
+
         return entity;
     }
 
