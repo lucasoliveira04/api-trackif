@@ -30,23 +30,25 @@ public class UserController {
         } catch (IllegalArgumentException e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error adding father");
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body("Error adding father : " + e.getMessage());
         } 
     }
 
     @PostMapping("/add/child")
     public ResponseEntity<String> addChild(@RequestBody UserDto userDto) {
-        try{
+        try {
             addUserChild.addUser(userDto);
             return ResponseEntity.ok("Child added successfully");
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
+            System.err.println("IllegalArgumentException: " + e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());
         } catch (Exception e) {
+            System.err.println("Exception ao adicionar criança: " + e.getMessage());
             return ResponseEntity.badRequest().body("Error adding child");
         }
-
-
     }
+
 
     @GetMapping("/list/fathers")
     public ResponseEntity<List<UserDto>> listFathers() {

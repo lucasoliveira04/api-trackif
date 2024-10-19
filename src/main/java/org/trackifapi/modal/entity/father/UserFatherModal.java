@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.trackifapi.Enum.RoleEnum;
+import org.trackifapi.modal.entity.addres.AddressModal;
 import org.trackifapi.modal.interfaces.IUserWithRoles;
 import org.trackifapi.modal.interfaces.IUser;
 
@@ -28,6 +29,9 @@ public class UserFatherModal implements IUser, IUserWithRoles {
     private String gender;
     private LocalDateTime createdAt;
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "userFather")
+    private AddressModal address;
+
     @Enumerated(EnumType.STRING)
     private RoleEnum roleEnum;
 
@@ -45,7 +49,6 @@ public class UserFatherModal implements IUser, IUserWithRoles {
     }
 
 
-    // Obtendo a data de criação do usuário
     @PrePersist
     protected void OnCreate() {
         this.createdAt = LocalDateTime.now();

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.trackifapi.Enum.RoleEnum;
+import org.trackifapi.modal.entity.addres.AddressModal;
 import org.trackifapi.modal.entity.child.UserChildModal;
 import org.trackifapi.modal.entity.father.UserFatherModal;
 
@@ -30,6 +31,7 @@ public class UserDto implements Serializable {
     private LocalDateTime createdAt;
 
     private TokenDto token;
+    private AddressDto addressDto;
 
     /**
      * fromEntity para usuario pai
@@ -47,6 +49,11 @@ public class UserDto implements Serializable {
         userDto.setGender(userFatherModal.getGender());
         userDto.setRoleEnum(userFatherModal.getRoleEnum());
         userDto.setCreatedAt(userFatherModal.getCreatedAt());
+
+        if (userFatherModal.getAddress() != null){
+            userDto.setAddressDto(AddressDto.fromEntity(userFatherModal.getAddress()));
+        }
+
         return userDto;
     }
 
@@ -70,6 +77,10 @@ public class UserDto implements Serializable {
 
         if (userChildModal.getToken() != null) {
             userDto.setToken(TokenDto.fromEntity(userChildModal.getToken()));
+        }
+
+        if (userChildModal.getAddress() != null){
+            userDto.setAddressDto(AddressDto.fromEntity(userChildModal.getAddress()));
         }
 
         return userDto;

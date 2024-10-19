@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.trackifapi.Enum.RoleEnum;
+import org.trackifapi.modal.entity.addres.AddressModal;
 import org.trackifapi.modal.entity.token.TokenModal;
 import org.trackifapi.modal.interfaces.IUser;
 import org.trackifapi.modal.interfaces.IUserWithRoles;
@@ -31,9 +32,12 @@ public class UserChildModal implements IUser, IUserWithRoles {
 
     @Enumerated(EnumType.STRING)
     private RoleEnum roleEnum;
-
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "userChild")
     private TokenModal token;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "userChild")
+    private AddressModal address;
 
     public UserChildModal(String name, String rg, String cpf, int age, String email, String phone, Date dateBirth, String gender, RoleEnum roleEnum) {
         this.name = name;
