@@ -1,5 +1,6 @@
 package org.trackifapi.services.AddedUser;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.trackifapi.Enum.RoleEnum;
 import org.trackifapi.mapper.UserMapper;
@@ -29,20 +30,27 @@ public class AddUserChild implements IUserService {
         this.addressModalRepository = addressModalRepository;
     }
 
+    @Transactional
     public void addUser(UserDto user) {
-        try{
+        try {
             UserChildModal userChildModal = new UserChildModal();
 
             userMapper.applyRegex(user);
-
             UserMapper.mapDtoToUser(user, userChildModal);
+            RoleEnum role = RoleEnum.USER_CHILD;
+            userChildModal.setRoleEnum(role);
 
-            userChildModal.setRoleEnum(RoleEnum.USER_CHILD);
-
-            AddressModal addressModal = new AddressModal();
-            if (user.getAddressDto() != null){
+            AddressModal addressModal = null;
+            if (user.getAddressDto() != null) {
                 addressModal = UserMapper.mapAddressDtoToAddressModal(user.getAddressDto());
                 addressModal.setUserChild(userChildModal);
+            }
+
+            userChildModal.setAddress(addressModal);
+
+            if (addressModal != null) {
+                addressModalRepository.save(addressModal);
+                System.out.println("Endereço salvo: " + addressModal.getStreet());
             }
 
             TokenModal tokenModal = new TokenModal();
@@ -51,14 +59,18 @@ public class AddUserChild implements IUserService {
             tokenModal.setUserChild(userChildModal);
 
             userChildModal.setToken(tokenModal);
-            userChildModal.setAddress(addressModal);
+            userChildModal = userChildModalRepository.save(userChildModal);
 
-            userChildModalRepository.save(userChildModal);
+            tokenModal.setUserChild(userChildModal);
             tokenModalRepository.save(tokenModal);
-            addressModalRepository.save(addressModal);
 
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            System.out.println("Usuário salvo: " + userChildModal);
+        } catch (Exception e) {
+            System.err.println("Erro ao adicionar usuário: " + e.getMessage());
+            throw e;
         }
     }
+
+
+
 }
