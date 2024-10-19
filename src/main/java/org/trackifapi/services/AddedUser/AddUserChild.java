@@ -9,16 +9,16 @@ import org.trackifapi.modal.dto.UserDto;
 import org.trackifapi.modal.entity.child.UserChildModal;
 import org.trackifapi.modal.entity.token.TokenModal;
 import org.trackifapi.services.interfaces.IUserService;
-import org.trackifapi.services.token.GenerateToken;
+import org.trackifapi.services.token.GenerateTokenImpl;
 
 @Service
 public class AddUserChild implements IUserService {
     private final UserChildModalRepository userChildModalRepository;
     private final TokenModalRepository tokenModalRepository;
-    private final GenerateToken generateToken;
+    private final GenerateTokenImpl generateToken;
     private final UserMapper userMapper;
 
-    public AddUserChild(UserChildModalRepository userChildModalRepository, TokenModalRepository tokenModalRepository, GenerateToken generateToken, org.trackifapi.mapper.UserMapper userMapper) {
+    public AddUserChild(UserChildModalRepository userChildModalRepository, TokenModalRepository tokenModalRepository, GenerateTokenImpl generateToken, org.trackifapi.mapper.UserMapper userMapper) {
         this.userChildModalRepository = userChildModalRepository;
         this.tokenModalRepository = tokenModalRepository;
         this.generateToken = generateToken;
@@ -36,7 +36,7 @@ public class AddUserChild implements IUserService {
             userChildModal.setRoleEnum(RoleEnum.USER_CHILD);
 
             TokenModal tokenModal = new TokenModal();
-            String generatedToken = generateToken.generateToken(userChildModal.getRoleEnum(), userChildModal);
+            String generatedToken = generateToken.createToken(userChildModal.getRoleEnum(), userChildModal);
 
             tokenModal.setToken(generatedToken);
             tokenModal.setUserChild(userChildModal);
