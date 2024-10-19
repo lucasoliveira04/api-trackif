@@ -4,8 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.trackifapi.modal.Repository.UserChildModalRepository;
 import org.trackifapi.modal.dto.UserDto;
-import org.trackifapi.modal.entity.child.UserChildModal;
-import org.trackifapi.services.token.GenerateTokenImpl;
+import org.trackifapi.services.token.TokenCrudImpl;
 
 import java.util.List;
 
@@ -13,10 +12,10 @@ import java.util.List;
 @RequestMapping("/api/token")
 public class TokenController {
 
-    private final GenerateTokenImpl generateToken;
+    private final TokenCrudImpl generateToken;
     private final UserChildModalRepository userChildModalRepository;
 
-    public TokenController(GenerateTokenImpl generateToken, UserChildModalRepository userChildModalRepository) {
+    public TokenController(TokenCrudImpl generateToken, UserChildModalRepository userChildModalRepository) {
         this.generateToken = generateToken;
         this.userChildModalRepository = userChildModalRepository;
     }
